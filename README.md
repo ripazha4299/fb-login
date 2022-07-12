@@ -1,3 +1,7 @@
+# ABOUT:
+
+Basic application in React that enables user to login with FB and display their details like name, email and display picture
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
