@@ -6,10 +6,7 @@ import Json from './Json';
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <FbLogin/>
-        {/* <Json/> */}
-      </header>
+        <Json/>
     </div>
   );
 }

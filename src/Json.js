@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import FacebookLogin from 'react-facebook-login';
+import DropdownTreeSelect from 'react-dropdown-tree-select';
+import data2 from "./data.json";
+import 'react-dropdown-tree-select/dist/styles.css';
 
 let hierarchy = [{
   position_name: 'Fallout zone',
@@ -255,35 +257,54 @@ let hierarchy = [{
   }, ],
 }, ];
 
-export default class FbLogin extends Component {
-  
-  state = {
-    ele:<div></div>,
-    num:0
-  }
+var iterate = (value) => {
+  var x=[];
+  value.map((item)=>{
+    var obj = {
+      value : item.position_id,
+      label : item.position_name,
+      children : []
+    }
+    if(item.child!=[]){
+      obj.children=iterate(item.child)
+    }
+    x.push(obj);
+  })
+  return x;
+}
+var dataX = iterate(hierarchy);
+console.log("DATA");
+console.log(dataX);
+console.log("DATA2");
+console.log(data2);
 
-  keep = (value,i) => {
-    value.map((item,index)=>{
-      console.log(index);
-      console.log(i,item);
-      if(item.child!=[]){
-        this.keep(item.child,index+1)
+export default class Json extends Component {
+
+  onChange = (currentNode, selectedNodes) => {
+    console.log("path::", currentNode.path);
+  };
+
+  assignObjectPaths = (obj, stack) => {
+    Object.keys(obj).forEach(k => {
+      const node = obj[k];
+      if (typeof node === "object") {
+        node.path = stack ? `${stack}.${k}` : k;
+        this.assignObjectPaths(node, node.path);
       }
-      return(<div>{item}</div>)
-    })
-  }
-
-  componentDidMount(){
-    this.setState({
-      ele:this.keep(hierarchy,0)
-    })
-  }
+    });
+  };
 
   render() {
+    this.assignObjectPaths(data2);
+    console.log(data2)
     return (
       <div>
         <div>JSON</div>
-        {this.state.ele}
+        <DropdownTreeSelect 
+          data={dataX}
+          onChange={this.onChange}
+          className="bootstrap-demo"
+        />
       </div>
     )
   }
